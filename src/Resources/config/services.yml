@@ -1,0 +1,115 @@
+services:
+    _defaults:
+        public: false
+
+    DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry:
+        arguments:
+            - '%danmyers_custom_entity.entities%'
+
+    danmyers_custom_entity.registry:
+        alias: DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry
+        public: true
+
+    DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+
+    DanMyers\CustomEntityBundle\Updater\CustomEntityUpdater:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+            - '@doctrine.orm.entity_manager'
+            - '@property_accessor'
+            - '@pim_catalog.repository.locale'
+            - '@akeneo_file_storage.repository.file_info'
+            - '@akeneo_file_storage.file_storage.file.file_storer'
+
+    danmyers_custom_entity.updater:
+        alias: DanMyers\CustomEntityBundle\Updater\CustomEntityUpdater
+        public: true
+
+    danmyers_custom_entity.saver:
+        class: Akeneo\Tool\Bundle\StorageUtilsBundle\Doctrine\Common\Saver\BaseSaver
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - 'DanMyers\CustomEntityBundle\Entity\AbstractCustomEntity'
+
+    danmyers_custom_entity.remover:
+        class: Akeneo\Tool\Bundle\StorageUtilsBundle\Doctrine\Common\Remover\BaseRemover
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - 'DanMyers\CustomEntityBundle\Entity\AbstractCustomEntity'
+
+    DanMyers\CustomEntityBundle\Manager\CustomEntityManager:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@DanMyers\CustomEntityBundle\Updater\CustomEntityUpdater'
+            - '@validator'
+            - '@danmyers_custom_entity.saver'
+            - '@danmyers_custom_entity.remover'
+            - '@pim_internal_api_serializer'
+        tags:
+            - { name: danmyers_custom_entity.manager, alias: default }
+
+    danmyers_custom_entity.manager:
+        alias: DanMyers\CustomEntityBundle\Manager\CustomEntityManager
+        public: true
+
+    DanMyers\CustomEntityBundle\Manager\ManagerRegistry:
+        arguments:
+            - !tagged_locator { tag: danmyers_custom_entity.manager, index_by: alias }
+
+    danmyers_custom_entity.manager_registry:
+        alias: DanMyers\CustomEntityBundle\Manager\ManagerRegistry
+        public: true
+
+    DanMyers\CustomEntityBundle\Usage\EntityUsageChecker:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@pim_catalog.repository.attribute'
+            - '@pim_catalog.query.product_and_product_model_query_builder_factory'
+
+    DanMyers\CustomEntityBundle\EventSubscriber\PreventRemovalOfUsedEntitySubscriber:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Usage\EntityUsageChecker'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    DanMyers\CustomEntityBundle\Acl\CustomEntityAclLoader:
+        arguments:
+            - '%danmyers_custom_entity.entities%'
+        tags:
+            - { name: oro_security.acl.config_loader }
+
+    DanMyers\CustomEntityBundle\Installer\JobInstanceInstaller:
+        arguments:
+            - '@akeneo_batch.job.job_instance_repository'
+            - '@akeneo_batch.saver.job_instance'
+            - '@akeneo_batch.job.job_registry'
+            - '@akeneo_batch.job_parameters_factory'
+
+    DanMyers\CustomEntityBundle\Installer\InstallerSubscriber:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Installer\JobInstanceInstaller'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    DanMyers\CustomEntityBundle\Export\QuickExportLauncher:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Installer\JobInstanceInstaller'
+            - '@pim_connector.launcher.authenticated_job_launcher'
+            - '@security.token_storage'
+
+    DanMyers\CustomEntityBundle\Command\InstallCommand:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Installer\JobInstanceInstaller'
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: console.command }

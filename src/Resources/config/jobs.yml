@@ -1,0 +1,134 @@
+parameters:
+    danmyers_custom_entity.connector_name: 'Custom Entity Connector'
+
+services:
+    _defaults:
+        public: false
+
+    # Steps
+    danmyers_custom_entity.step.csv_import:
+        class: '%pim_connector.step.item_step.class%'
+        arguments:
+            - 'import'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@danmyers_custom_entity.reader.file.csv'
+            - '@danmyers_custom_entity.processor.denormalization'
+            - '@danmyers_custom_entity.writer.database'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+
+    danmyers_custom_entity.step.xlsx_import:
+        class: '%pim_connector.step.item_step.class%'
+        arguments:
+            - 'import'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@danmyers_custom_entity.reader.file.xlsx'
+            - '@danmyers_custom_entity.processor.denormalization'
+            - '@danmyers_custom_entity.writer.database'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+
+    danmyers_custom_entity.step.csv_export:
+        class: '%pim_connector.step.item_step.class%'
+        arguments:
+            - 'export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@danmyers_custom_entity.reader.database'
+            - '@danmyers_custom_entity.processor.normalization'
+            - '@danmyers_custom_entity.writer.file.csv'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+
+    danmyers_custom_entity.step.xlsx_export:
+        class: '%pim_connector.step.item_step.class%'
+        arguments:
+            - 'export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@danmyers_custom_entity.reader.database'
+            - '@danmyers_custom_entity.processor.normalization'
+            - '@danmyers_custom_entity.writer.file.xlsx'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+
+    # Jobs
+    danmyers_custom_entity.job.csv_import:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_csv_import'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@akeneo.job_automation.connector.step.download'
+                - '@pim_connector.step.charset_validator'
+                - '@danmyers_custom_entity.step.csv_import'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: '%pim_connector.job.import_type%' }
+
+    danmyers_custom_entity.job.xlsx_import:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_xlsx_import'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@akeneo.job_automation.connector.step.download'
+                - '@pim_connector.step.charset_validator'
+                - '@danmyers_custom_entity.step.xlsx_import'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: '%pim_connector.job.import_type%' }
+
+    danmyers_custom_entity.job.csv_export:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_csv_export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@danmyers_custom_entity.step.csv_export'
+                - '@akeneo.job_automation.connector.step.upload'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: '%pim_connector.job.export_type%' }
+
+    danmyers_custom_entity.job.xlsx_export:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_xlsx_export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@danmyers_custom_entity.step.xlsx_export'
+                - '@akeneo.job_automation.connector.step.upload'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: '%pim_connector.job.export_type%' }
+
+    danmyers_custom_entity.job.csv_quick_export:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_csv_quick_export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@danmyers_custom_entity.step.csv_export'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: 'quick_export' }
+
+    danmyers_custom_entity.job.xlsx_quick_export:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - 'danmyers_custom_entity_xlsx_quick_export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@danmyers_custom_entity.step.xlsx_export'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%danmyers_custom_entity.connector_name%', type: 'quick_export' }

@@ -1,0 +1,30 @@
+services:
+    # Priority 100 puts these above Akeneo's generic normalizers (90), e.g. the
+    # product versioning normalizer that claims every reference data object.
+    # Tag your own normalizer with a priority above 100 to customise one entity.
+    DanMyers\CustomEntityBundle\Normalizer\Standard\CustomEntityNormalizer:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+            - '@property_accessor'
+        tags:
+            - { name: pim_standard_format_serializer.normalizer, priority: 100 }
+
+    DanMyers\CustomEntityBundle\Normalizer\Flat\CustomEntityNormalizer:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+            - '@property_accessor'
+        tags:
+            - { name: pim_versioning.serializer.normalizer, priority: 100 }
+
+    DanMyers\CustomEntityBundle\Normalizer\InternalApi\CustomEntityNormalizer:
+        arguments:
+            - '@pim_standard_format_serializer'
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+            - '@pim_versioning.manager.version'
+            - '@pim_enrich.normalizer.version'
+            - '@property_accessor'
+        tags:
+            - { name: pim_internal_api_serializer.normalizer, priority: 100 }

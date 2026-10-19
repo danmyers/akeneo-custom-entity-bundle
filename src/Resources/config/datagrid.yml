@@ -1,0 +1,26 @@
+services:
+    DanMyers\CustomEntityBundle\Datagrid\DatagridConfigurationProvider:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+            - '@oro_datagrid.provider.resolver'
+            - '%danmyers_custom_entity.entities%'
+        tags:
+            - { name: oro_datagrid.configuration.provider, priority: 0 }
+
+    DanMyers\CustomEntityBundle\Datagrid\MassAction\MassDeleteHandler:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Manager\ManagerRegistry'
+            - '@DanMyers\CustomEntityBundle\Usage\EntityUsageChecker'
+            - '@pim_datagrid.datasource.result_record.hydrator.object_id'
+            - '@translator'
+        tags:
+            - { name: pim_datagrid.extension.mass_action.handler, alias: danmyers_custom_entity_mass_delete }
+
+    DanMyers\CustomEntityBundle\Datagrid\MassAction\QuickExportHandler:
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Export\QuickExportLauncher'
+            - '@pim_datagrid.datasource.result_record.hydrator.object_id'
+        tags:
+            - { name: pim_datagrid.extension.mass_action.handler, alias: danmyers_custom_entity_quick_export }

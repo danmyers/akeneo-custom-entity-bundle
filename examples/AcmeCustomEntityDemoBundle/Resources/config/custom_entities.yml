@@ -1,0 +1,25 @@
+danmyers_custom_entity:
+    entities:
+        demo_color:
+            class: Acme\Bundle\CustomEntityDemoBundle\Entity\Color
+            reference_data: simple
+            label: Colors
+            fields:
+                hex:
+                    label: Hex code
+                    filter: true
+        demo_fabric:
+            class: Acme\Bundle\CustomEntityDemoBundle\Entity\Fabric
+            reference_data: multi
+            label: Fabrics
+        demo_brand:
+            class: Acme\Bundle\CustomEntityDemoBundle\Entity\Brand
+            reference_data: simple
+            label: Brands
+            fields:
+                website:
+                    grid: false
+        demo_pictogram:
+            class: Acme\Bundle\CustomEntityDemoBundle\Entity\Pictogram
+            reference_data: multi
+            label: Pictograms

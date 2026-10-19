@@ -1,0 +1,78 @@
+# Generic index page shared by every custom entity type. The type is resolved
+# from the route by the "danmyers-custom-entity/controller/index" controller.
+extensions:
+    danmyers-custom-entity-index:
+        module: pim/common/simple-view
+        config:
+            template: pim/template/common/default-template
+        forwarded-events:
+            grid_load:start: grid_load:start
+            grid_load:complete: grid_load:complete
+
+    danmyers-custom-entity-index-grid-container:
+        module: pim/common/simple-view
+        parent: danmyers-custom-entity-index
+        targetZone: content
+        config:
+            template: pim/template/form/index/index
+
+    danmyers-custom-entity-index-user-navigation:
+        module: pim/menu/user-navigation
+        parent: danmyers-custom-entity-index
+        targetZone: user-menu
+        config:
+            userAccount: pim_menu.user.user_account
+            logout: pim_menu.user.logout
+
+    danmyers-custom-entity-index-grid-title:
+        module: danmyers-custom-entity/index/grid-title
+        parent: danmyers-custom-entity-index
+        targetZone: title
+
+    danmyers-custom-entity-index-breadcrumbs:
+        module: danmyers-custom-entity/common/breadcrumbs
+        parent: danmyers-custom-entity-index
+        targetZone: breadcrumbs
+        config:
+            tab: danmyers-custom-entity-menu
+
+    danmyers-custom-entity-index-filters-list:
+        module: oro/datafilter/filters-list
+        parent: danmyers-custom-entity-index-grid-container
+        targetZone: filters
+
+    danmyers-custom-entity-index-filters-manage:
+        module: oro/datafilter/filters-button
+        parent: danmyers-custom-entity-index-grid-container
+        targetZone: filters
+
+    danmyers-custom-entity-index-mass-actions:
+        module: pim/family/grid/mass-actions
+        parent: danmyers-custom-entity-index
+        targetZone: bottom-panel
+        config:
+            label: danmyers_custom_entity.index.selected
+
+    danmyers-custom-entity-index-actions-panel:
+        module: oro/datagrid/actions-panel
+        parent: danmyers-custom-entity-index-mass-actions
+        targetZone: actions-panel
+
+    danmyers-custom-entity-index-pagination:
+        module: danmyers-custom-entity/index/pagination
+        parent: danmyers-custom-entity-index-grid-container
+        targetZone: toolbar
+
+    danmyers-custom-entity-index-grid:
+        module: danmyers-custom-entity/index/grid
+        parent: danmyers-custom-entity-index-grid-container
+        position: 1000
+
+    danmyers-custom-entity-index-create-button:
+        module: danmyers-custom-entity/index/create-button
+        parent: danmyers-custom-entity-index
+        targetZone: buttons
+        position: 100
+        config:
+            iconName: plus
+            title: pim_common.create

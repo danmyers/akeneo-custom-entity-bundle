@@ -1,0 +1,35 @@
+config:
+    paths:
+        danmyers-custom-entity/type-registry: danmyerscustomentity/js/type-registry
+        danmyers-custom-entity/controller/home: danmyerscustomentity/js/controller/home
+        danmyers-custom-entity/controller/index: danmyerscustomentity/js/controller/index
+        danmyers-custom-entity/controller/edit: danmyerscustomentity/js/controller/edit
+        danmyers-custom-entity/menu/navigation-block: danmyerscustomentity/js/menu/navigation-block
+        danmyers-custom-entity/common/breadcrumbs: danmyerscustomentity/js/common/breadcrumbs
+        danmyers-custom-entity/index/grid: danmyerscustomentity/js/index/grid
+        danmyers-custom-entity/index/grid-title: danmyerscustomentity/js/index/grid-title
+        danmyers-custom-entity/index/pagination: danmyerscustomentity/js/index/pagination
+        danmyers-custom-entity/index/create-button: danmyerscustomentity/js/index/create-button
+        danmyers-custom-entity/form/fields: danmyerscustomentity/js/form/fields
+        danmyers-custom-entity/form/creation/modal: danmyerscustomentity/js/form/creation/modal
+        danmyers-custom-entity/form/creation/label: danmyerscustomentity/js/form/creation/label
+        danmyers-custom-entity/form/edit/title: danmyerscustomentity/js/form/edit/title
+        danmyers-custom-entity/form/edit/save: danmyerscustomentity/js/form/edit/save
+        danmyers-custom-entity/form/edit/delete: danmyerscustomentity/js/form/edit/delete
+        danmyers-custom-entity/form/edit/translations: danmyerscustomentity/js/form/edit/translations
+        danmyers-custom-entity/form/edit/translation-section: danmyerscustomentity/js/form/edit/translation-section
+        danmyers-custom-entity/form/edit/history: danmyerscustomentity/js/form/edit/history
+        danmyers-custom-entity/job/custom-entity-select: danmyerscustomentity/js/job/custom-entity-select
+        danmyers-custom-entity/product/field/reference-multi-select-field: danmyerscustomentity/js/product/field/reference-multi-select-field
+        danmyers-custom-entity/product/field/reference-picker: danmyerscustomentity/js/product/field/reference-picker
+        danmyers-custom-entity/template/product/reference-picker: danmyerscustomentity/templates/product/reference-picker.html
+
+    config:
+        pim/controller-registry:
+            controllers:
+                danmyers_custom_entity_home:
+                    module: danmyers-custom-entity/controller/home
+                danmyers_custom_entity_index:
+                    module: danmyers-custom-entity/controller/index
+                danmyers_custom_entity_edit:
+                    module: danmyers-custom-entity/controller/edit

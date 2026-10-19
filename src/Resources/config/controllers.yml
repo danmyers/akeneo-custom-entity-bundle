@@ -1,0 +1,20 @@
+services:
+    DanMyers\CustomEntityBundle\Controller\CustomEntityRestController:
+        public: true
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Manager\ManagerRegistry'
+            - '@oro_security.security_facade'
+            - '@event_dispatcher'
+            - '@pim_enrich.normalizer.violation'
+            - '@pim_user.context.user'
+            - '@doctrine.orm.entity_manager'
+            - '@DanMyers\CustomEntityBundle\Schema\FieldSchemaProvider'
+
+    DanMyers\CustomEntityBundle\Controller\QuickExportController:
+        public: true
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@oro_datagrid.mass_action.parameters_parser'
+            - '@pim_datagrid.extension.mass_action.dispatcher'
+            - '@oro_security.security_facade'

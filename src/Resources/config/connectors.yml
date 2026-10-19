@@ -1,0 +1,180 @@
+services:
+    _defaults:
+        public: false
+
+    # Readers
+    danmyers_custom_entity.reader.database:
+        class: DanMyers\CustomEntityBundle\Connector\Reader\CustomEntityReader
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@doctrine.orm.entity_manager'
+
+    danmyers_custom_entity.array_converter.flat_to_standard:
+        class: DanMyers\CustomEntityBundle\Connector\ArrayConverter\FlatToStandard\CustomEntityConverter
+
+    danmyers_custom_entity.reader.file.csv:
+        class: '%pim_connector.reader.file.csv.class%'
+        arguments:
+            - '@pim_connector.reader.file.csv_iterator_factory'
+            - '@danmyers_custom_entity.array_converter.flat_to_standard'
+
+    danmyers_custom_entity.reader.file.xlsx:
+        class: '%pim_connector.reader.file.xlsx.class%'
+        arguments:
+            - '@pim_connector.reader.file.xlsx_iterator_factory'
+            - '@danmyers_custom_entity.array_converter.flat_to_standard'
+
+    # Processors
+    danmyers_custom_entity.processor.denormalization:
+        class: DanMyers\CustomEntityBundle\Connector\Processor\Denormalization\CustomEntityProcessor
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - '@DanMyers\CustomEntityBundle\Manager\ManagerRegistry'
+            - '@akeneo_storage_utils.doctrine.object_detacher'
+
+    danmyers_custom_entity.processor.normalization:
+        class: DanMyers\CustomEntityBundle\Connector\Processor\Normalization\CustomEntityProcessor
+        arguments:
+            - '@DanMyers\CustomEntityBundle\Normalizer\Flat\CustomEntityNormalizer'
+            - '@pim_catalog.repository.locale'
+            - '@akeneo_storage_utils.doctrine.object_detacher'
+
+    # Writers
+    danmyers_custom_entity.writer.database:
+        class: '%pim_connector.writer.database.class%'
+        arguments:
+            - '@danmyers_custom_entity.saver'
+            - '@akeneo_storage_utils.doctrine.object_detacher'
+
+    danmyers_custom_entity.writer.file.csv:
+        class: '%pim_connector.writer.file.csv.class%'
+        arguments:
+            - '@pim_connector.array_converter.dummy'
+            - '@pim_connector.factory.flat_item_buffer'
+            - '@pim_connector.writer.file.flat_item_buffer_flusher'
+
+    danmyers_custom_entity.writer.file.xlsx:
+        class: '%pim_connector.writer.file.xlsx.class%'
+        arguments:
+            - '@pim_connector.array_converter.dummy'
+            - '@pim_connector.factory.flat_item_buffer'
+            - '@pim_connector.writer.file.flat_item_buffer_flusher'
+
+    # Job parameters
+    danmyers_custom_entity.job_parameters.constraints.csv_import:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleCsvImport, arguments: [['danmyers_custom_entity_csv_import']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_csv_import']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.constraints.xlsx_import:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleXlsxImport, arguments: [['danmyers_custom_entity_xlsx_import']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_xlsx_import']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.constraints.csv_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleCsvExport, arguments: [['danmyers_custom_entity_csv_export']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_csv_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.constraints.xlsx_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleXlsxExport, arguments: [['danmyers_custom_entity_xlsx_export']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_xlsx_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.constraints.csv_quick_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleCsvExport, arguments: [['danmyers_custom_entity_csv_quick_export']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_csv_quick_export']
+            - true
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.constraints.xlsx_quick_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\ConstraintCollectionProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\ConstraintCollectionProvider\SimpleXlsxExport, arguments: [['danmyers_custom_entity_xlsx_quick_export']] }
+            - '@DanMyers\CustomEntityBundle\Registry\CustomEntityRegistry'
+            - ['danmyers_custom_entity_xlsx_quick_export']
+            - true
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.csv_import:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleCsvImport, arguments: [['danmyers_custom_entity_csv_import']] }
+            - ['danmyers_custom_entity_csv_import']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.xlsx_import:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleXlsxImport, arguments: [['danmyers_custom_entity_xlsx_import']] }
+            - ['danmyers_custom_entity_xlsx_import']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.csv_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleCsvExport, arguments: [['danmyers_custom_entity_csv_export']] }
+            - ['danmyers_custom_entity_csv_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.xlsx_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleXlsxExport, arguments: [['danmyers_custom_entity_xlsx_export']] }
+            - ['danmyers_custom_entity_xlsx_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.csv_quick_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleCsvExport, arguments: [['danmyers_custom_entity_csv_quick_export']] }
+            - ['danmyers_custom_entity_csv_quick_export']
+            - true
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    danmyers_custom_entity.job_parameters.defaults.xlsx_quick_export:
+        class: DanMyers\CustomEntityBundle\Connector\JobParameters\DefaultValuesProvider
+        arguments:
+            - !service { class: Akeneo\Tool\Component\Connector\Job\JobParameters\DefaultValuesProvider\SimpleXlsxExport, arguments: [['danmyers_custom_entity_xlsx_quick_export']] }
+            - ['danmyers_custom_entity_xlsx_quick_export']
+            - true
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
+
+    # Job profile screens: the core simple CSV / XLSX forms, extended with the
+    # custom entity selector (see form_extensions/job_instance.yml)
+    danmyers_custom_entity.provider.form.job_instance:
+        class: Akeneo\Platform\Bundle\ImportExportBundle\Provider\Form\JobInstanceFormProvider
+        arguments:
+            -   danmyers_custom_entity_csv_import: pim-job-instance-csv-base-import
+                danmyers_custom_entity_csv_export: pim-job-instance-csv-base-export
+                danmyers_custom_entity_xlsx_import: pim-job-instance-xlsx-base-import
+                danmyers_custom_entity_xlsx_export: pim-job-instance-xlsx-base-export
+        tags:
+            - { name: pim_enrich.provider.form, priority: 100 }

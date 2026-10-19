@@ -1,0 +1,26 @@
+# The custom entity jobs reuse Akeneo's simple CSV / XLSX job profile forms.
+# This selector is added to them and only renders for the custom entity jobs.
+extensions:
+    danmyers-custom-entity-job-csv-import-edit-custom-entity:
+        module: danmyers-custom-entity/job/custom-entity-select
+        parent: pim-job-instance-csv-base-import-edit-properties
+        targetZone: properties
+        position: 115
+
+    danmyers-custom-entity-job-csv-export-edit-custom-entity:
+        module: danmyers-custom-entity/job/custom-entity-select
+        parent: pim-job-instance-csv-base-export-edit-properties
+        targetZone: properties
+        position: 115
+
+    danmyers-custom-entity-job-xlsx-import-edit-custom-entity:
+        module: danmyers-custom-entity/job/custom-entity-select
+        parent: pim-job-instance-xlsx-base-import-edit-properties
+        targetZone: properties
+        position: 115
+
+    danmyers-custom-entity-job-xlsx-export-edit-custom-entity:
+        module: danmyers-custom-entity/job/custom-entity-select
+        parent: pim-job-instance-xlsx-base-export-edit-properties
+        targetZone: properties
+        position: 115

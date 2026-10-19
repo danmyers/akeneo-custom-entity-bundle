@@ -1,0 +1,80 @@
+# Import in config/routes/routes.yml:
+#
+#     danmyers_custom_entity:
+#         resource: '@DanMyersCustomEntityBundle/Resources/config/routing.yml'
+#         prefix: /custom-entity
+
+# Front routes, rendered by the custom entity frontend controllers
+danmyers_custom_entity_home:
+    path: ''
+
+danmyers_custom_entity_index:
+    path: /{customEntityName}
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+
+danmyers_custom_entity_edit:
+    path: /{customEntityName}/{id}/edit
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+        id: '\d+'
+
+# Internal REST API
+danmyers_custom_entity_rest_types:
+    path: /rest/types
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::listTypesAction
+    methods: [GET]
+
+danmyers_custom_entity_rest_list:
+    path: /rest/{customEntityName}
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::listAction
+    methods: [GET]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+
+danmyers_custom_entity_rest_create:
+    path: /rest/{customEntityName}
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::createAction
+    methods: [POST]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+
+danmyers_custom_entity_rest_search:
+    path: /rest/{customEntityName}/search
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::searchAction
+    methods: [GET]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+
+danmyers_custom_entity_rest_get:
+    path: /rest/{customEntityName}/{id}
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::getAction
+    methods: [GET]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+        id: '\d+'
+
+danmyers_custom_entity_rest_update:
+    path: /rest/{customEntityName}/{id}
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::updateAction
+    methods: [POST, PATCH]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+        id: '\d+'
+
+danmyers_custom_entity_rest_delete:
+    path: /rest/{customEntityName}/{id}
+    controller: DanMyers\CustomEntityBundle\Controller\CustomEntityRestController::deleteAction
+    methods: [DELETE]
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+        id: '\d+'
+
+danmyers_custom_entity_quick_export:
+    path: /{customEntityName}/quick-export.{_format}
+    controller: DanMyers\CustomEntityBundle\Controller\QuickExportController::exportAction
+    defaults:
+        _format: csv
+    requirements:
+        customEntityName: '[a-z][a-z0-9_]*'
+        _format: csv|xlsx

@@ -1,0 +1,32 @@
+danmyers_custom_entity:
+    acl_group:
+        custom_entities: Custom entities
+    job:
+        custom_entity:
+            not_blank: Choose the custom entity to process.
+            invalid: This custom entity does not exist.
+    mass_action:
+        delete:
+            success: The selected entities have been deleted.
+        quick_export:
+            success: The quick export has been launched.
+
+batch_jobs:
+    danmyers_custom_entity_csv_import:
+        label: Custom entity import in CSV
+        import.label: Custom entity import
+    danmyers_custom_entity_xlsx_import:
+        label: Custom entity import in XLSX
+        import.label: Custom entity import
+    danmyers_custom_entity_csv_export:
+        label: Custom entity export in CSV
+        export.label: Custom entity export
+    danmyers_custom_entity_xlsx_export:
+        label: Custom entity export in XLSX
+        export.label: Custom entity export
+    danmyers_custom_entity_csv_quick_export:
+        label: Custom entity quick export in CSV
+        export.label: Custom entity quick export
+    danmyers_custom_entity_xlsx_quick_export:
+        label: Custom entity quick export in XLSX
+        export.label: Custom entity quick export

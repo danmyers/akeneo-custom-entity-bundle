@@ -1,0 +1,16 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    bootstrapFiles:
+        - tests/bootstrap.php
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        # Akeneo documents TranslatableInterface::getTranslations() as ArrayCollection,
+        # but Doctrine hydrates PersistentCollection: Collection is the accurate type
+        - '#AbstractTranslatableCustomEntity::getTranslations\(\) should return Doctrine\\Common\\Collections\\ArrayCollection#'
+        # Symfony's fluent config tree builder is not precisely typed
+        -
+            message: '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\#'
+            path: src/DependencyInjection/Configuration.php

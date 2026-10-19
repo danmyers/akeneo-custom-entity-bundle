@@ -1,0 +1,33 @@
+extensions:
+    danmyers-custom-entity-menu:
+        module: pim/menu/tab
+        parent: pim-menu
+        position: 65
+        targetZone: mainMenu
+        config:
+            title: danmyers_custom_entity.menu.tab
+            iconModifier: iconSettings
+            icon: EntityIcon
+            # tab routes cannot have parameters: this landing page forwards to
+            # the first custom entity type; the tab is hidden without any type
+            to: danmyers_custom_entity_home
+            isLandingSectionPage: true
+
+    danmyers-custom-entity-menu-column:
+        module: pim/menu/column
+        parent: pim-menu
+        position: 500
+        targetZone: column
+        config:
+            stateCode: danmyers-custom-entity-menu
+            tab: danmyers-custom-entity-menu
+            navigationTitle: danmyers_custom_entity.menu.navigation
+
+    # One item per custom entity type is added at runtime by this block
+    danmyers-custom-entity-menu-navigation-block:
+        module: danmyers-custom-entity/menu/navigation-block
+        parent: danmyers-custom-entity-menu-column
+        position: 100
+        targetZone: navigation
+        config:
+            title: danmyers_custom_entity.menu.navigation

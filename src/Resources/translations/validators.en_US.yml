@@ -1,0 +1,8 @@
+danmyers_custom_entity:
+    code:
+        unique: This code is already used.
+        format: The code may only contain letters, digits and underscores.
+    job:
+        custom_entity:
+            not_blank: Choose the custom entity to process.
+            invalid: This custom entity does not exist.

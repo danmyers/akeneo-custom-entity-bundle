@@ -1,0 +1,94 @@
+danmyers_custom_entity:
+    menu:
+        tab: Custom entities
+        navigation: Custom entities
+    index:
+        title: '{{ label }}'
+        create: Create
+        selected: '{{ count }} selected'
+    create:
+        title: Create
+        success: The entity has been created.
+        label: Label
+    edit:
+        title: '{{ label }}'
+        update_success: The entity has been saved.
+        update_fail: The entity could not be saved.
+        fields_not_ready: 'Some fields are not ready: {{ fields }}'
+        sort_order: Sort order
+        no_fields: This entity has no other properties.
+        entity: Entity
+        meta:
+            created: Created
+            updated: Last update
+            by: by
+    delete:
+        confirm: Delete this entity?
+        content: Are you sure you want to delete this entity?
+        success: The entity has been deleted.
+        fail: The entity could not be deleted.
+    mass_action:
+        delete:
+            confirm_content: Are you sure you want to delete the selected entities?
+            success: The selected entities have been deleted.
+            error: An error occurred while deleting the selected entities.
+            empty_selection: Please select at least one entity.
+        quick_export:
+            csv: Quick export (CSV)
+            xlsx: Quick export (XLSX)
+    picker:
+        open: Add values
+        search: Search by code or label
+        no_results: No results.
+        already_added: already added
+        load_more: Load more
+        selected: '{0}No item selected|{1}1 item selected|]1, Inf[{{ count }} items selected'
+        clear: Clear selection
+        select_all: 'Select all ({{ count }})'
+        add: '{0}Add|{1}Add 1 item|]1, Inf[Add {{ count }} items'
+        search_failed: The search failed. Please try again.
+    job:
+        custom_entity:
+            label: Custom entity
+            help: The custom entity type to import or export.
+            empty: No custom entity is configured.
+
+pim_menu:
+    tab:
+        danmyers_custom_entity: Custom entities
+
+# used by Akeneo's datagrid row delete action (grid option entityHint: custom_entity)
+pim_enrich:
+    entity:
+        custom_entity:
+            module:
+                delete:
+                    confirm: Delete this entity?
+            flash:
+                delete:
+                    success: The entity has been deleted.
+                    fail: The entity could not be deleted.
+
+batch_jobs:
+    danmyers_custom_entity_csv_import:
+        label: Custom entity import in CSV
+        import.label: Custom entity import
+    danmyers_custom_entity_xlsx_import:
+        label: Custom entity import in XLSX
+        import.label: Custom entity import
+    danmyers_custom_entity_csv_export:
+        label: Custom entity export in CSV
+        export.label: Custom entity export
+    danmyers_custom_entity_xlsx_export:
+        label: Custom entity export in XLSX
+        export.label: Custom entity export
+    danmyers_custom_entity_csv_quick_export:
+        label: Custom entity quick export in CSV
+        export.label: Custom entity quick export
+    danmyers_custom_entity_xlsx_quick_export:
+        label: Custom entity quick export in XLSX
+        export.label: Custom entity quick export
+
+pim_title:
+    danmyers_custom_entity_index: '{{ custom entity.label }}'
+    danmyers_custom_entity_edit: '{{ custom entity.type }} {{ custom entity.label }} | Edit'
