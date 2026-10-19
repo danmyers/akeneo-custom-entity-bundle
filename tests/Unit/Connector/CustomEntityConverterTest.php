@@ -28,10 +28,15 @@ final class CustomEntityConverterTest extends TestCase
         ], $converted);
     }
 
-    public function test_the_code_is_mandatory(): void
+    public function test_the_code_column_is_mandatory(): void
     {
         $this->expectException(DataArrayConversionException::class);
 
-        (new CustomEntityConverter())->convert(['code' => '  ', 'name' => 'x']);
+        (new CustomEntityConverter())->convert(['name' => 'x']);
+    }
+
+    public function test_an_empty_code_is_passed_on_for_entities_generating_it(): void
+    {
+        self::assertSame(['code' => '', 'year' => '2026'], (new CustomEntityConverter())->convert(['code' => '', 'year' => '2026']));
     }
 }

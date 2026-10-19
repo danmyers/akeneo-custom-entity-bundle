@@ -199,6 +199,44 @@ attribute_fields:
     akeneo-multi-select-reference-data-field: pim/reference-multi-select-field
 ```
 
+## Generated codes and computed fields
+
+Codes can be derived from the other fields instead of being typed: implement
+`CodeGeneratingInterface`. The code is generated once, when the entity is created, then never changes
+(products reference it), and an entity generating an existing code is rejected as a duplicate. The
+creation popup then asks for every field instead of a code, and imports may leave the `code` column
+empty: rows are matched on the generated code.
+
+A mapped property without setter is treated as computed: shown in exports and filters, never edited,
+and ignored by imports. Together, for a vehicle labelled "2026 Jeep Wrangler Unlimited (JL)":
+
+```php
+#[ORM\Entity(repositoryClass: CustomEntityRepository::class)]
+class Vehicle extends AbstractCustomEntity implements CodeGeneratingInterface
+{
+    #[ORM\Column(type: 'integer')]
+    #[Assert\Range(min: 1900, maxPropertyPath: 'maxYear')]
+    protected ?int $year = null;
+
+    // make, model, generation columns with setters calling refreshLabel()...
+
+    #[ORM\Column(type: 'string', length: 255)]
+    protected string $label = '';          // getter only: computed
+
+    public static function getLabelProperty() { return 'label'; }
+
+    public function generateCode(): string  // "2026_jeep_wrangler_unlimited_jl"
+    {
+        return implode(' ', array_filter([(string) $this->year, $this->make, $this->model, $this->generation]));
+    }
+
+    public function getMaxYear(): int { return (int) date('Y') + 2; }
+}
+```
+
+Searches (selects, picker) match every word of the query, in any order, against the code and the
+label: "wrangler 2025" finds "2025 Jeep Wrangler Unlimited (JL)".
+
 ## Translatable entities
 
 Extend `AbstractTranslatableCustomEntity`, use `TranslatableCustomEntityRepository`, and declare the

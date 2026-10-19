@@ -58,12 +58,16 @@ class CustomEntityRepository extends ReferenceDataRepository implements MassActi
             $qb->select(sprintf("%1\$s.%2\$s AS id, CONCAT('[', %1\$s.code, ']') AS text", $alias, $idField));
         }
 
-        if (null !== $search && '' !== $search) {
-            $searchDql = sprintf('%s.code LIKE :search', $alias);
+        // every word must match the code or the label, in any order:
+        // "wrangler 2025" finds "2025 Jeep Wrangler Unlimited (JL)"
+        $words = null === $search ? [] : (preg_split('/\s+/', trim($search), -1, PREG_SPLIT_NO_EMPTY) ?: []);
+        foreach (array_values($words) as $index => $word) {
+            $parameter = 'search_' . $index;
+            $searchDql = sprintf('%s.code LIKE :%s', $alias, $parameter);
             if (null !== $labelExpression) {
-                $searchDql .= sprintf(' OR %s LIKE :search', $labelExpression);
+                $searchDql .= sprintf(' OR %s LIKE :%s', $labelExpression, $parameter);
             }
-            $qb->andWhere($searchDql)->setParameter('search', '%' . addcslashes($search, '%_') . '%');
+            $qb->andWhere($searchDql)->setParameter($parameter, '%' . addcslashes($word, '%_') . '%');
         }
 
         if (!empty($options['identifiers']) && is_array($options['identifiers'])) {

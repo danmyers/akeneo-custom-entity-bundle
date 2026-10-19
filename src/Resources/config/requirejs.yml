@@ -13,6 +13,7 @@ config:
         danmyers-custom-entity/form/fields: danmyerscustomentity/js/form/fields
         danmyers-custom-entity/form/creation/modal: danmyerscustomentity/js/form/creation/modal
         danmyers-custom-entity/form/creation/label: danmyerscustomentity/js/form/creation/label
+        danmyers-custom-entity/form/creation/code: danmyerscustomentity/js/form/creation/code
         danmyers-custom-entity/form/edit/title: danmyerscustomentity/js/form/edit/title
         danmyers-custom-entity/form/edit/save: danmyerscustomentity/js/form/edit/save
         danmyers-custom-entity/form/edit/delete: danmyerscustomentity/js/form/edit/delete

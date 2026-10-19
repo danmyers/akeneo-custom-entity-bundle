@@ -18,3 +18,7 @@ First release, for Akeneo PIM Community Edition 7.0.
 - Modal picker for reference data multi select attributes on products: search, tick several custom
   entities across searches and add them at once, with a "Select all" of the loaded results. Other
   reference data keeps Akeneo's field.
+- `CodeGeneratingInterface`: codes derived from the entity fields at creation, duplicates rejected,
+  code-less import rows matched on the generated code.
+- Mapped properties without setter are treated as computed (read-only, ignored by imports).
+- Searches match every word of the query, in any order.

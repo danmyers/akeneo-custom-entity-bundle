@@ -76,10 +76,13 @@ class FieldSchemaProvider
             $required = !($mapping['nullable'] ?? false)
                 && !isset($mapping['options']['default'])
                 && FieldDescriptor::TYPE_BOOLEAN !== $type;
+            // without setter, the property is computed by the entity: shown in
+            // grids and exports, never edited
+            $writable = self::isWritable($definition->getClass(), $name);
             $fields[$name] = [
                 'type' => $type,
-                'required' => $required && !$isSortOrder,
-                'form' => true,
+                'required' => $required && !$isSortOrder && $writable,
+                'form' => $writable,
                 'grid' => !$isSortOrder && in_array($type, [FieldDescriptor::TYPE_TEXT, FieldDescriptor::TYPE_NUMBER, FieldDescriptor::TYPE_BOOLEAN, FieldDescriptor::TYPE_DATE], true),
                 'filter' => $name === $labelProperty,
                 'position' => $isSortOrder ? 1000 : $position += 10,
@@ -163,6 +166,15 @@ class FieldSchemaProvider
             'datetime', 'datetime_immutable', 'datetimetz', 'datetimetz_immutable' => FieldDescriptor::TYPE_DATETIME,
             default => null,
         };
+    }
+
+    private static function isWritable(string $class, string $property): bool
+    {
+        if (method_exists($class, 'set' . ucfirst($property))) {
+            return true;
+        }
+
+        return property_exists($class, $property) && (new \ReflectionProperty($class, $property))->isPublic();
     }
 
     public static function humanize(string $property): string

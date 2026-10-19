@@ -16,8 +16,8 @@ class CustomEntityConverter implements ArrayConverterInterface
 {
     public function convert(array $item, array $options = [])
     {
-        if (!isset($item['code']) || '' === trim((string) $item['code'])) {
-            throw new DataArrayConversionException('The "code" column is mandatory and cannot be empty.');
+        if (!array_key_exists('code', $item)) {
+            throw new DataArrayConversionException('The "code" column is mandatory.');
         }
 
         $converted = [];

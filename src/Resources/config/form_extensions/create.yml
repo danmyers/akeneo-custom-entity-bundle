@@ -1,11 +1,11 @@
-# Generic creation modal: code, label (translatable entities) and the
-# required fields of the custom entity type.
+# Generic creation modal: code (unless generated), label (translatable
+# entities) and the required fields of the custom entity type.
 extensions:
     danmyers-custom-entity-create-modal:
         module: danmyers-custom-entity/form/creation/modal
 
     danmyers-custom-entity-create-modal-code:
-        module: pim/form/common/creation/field
+        module: danmyers-custom-entity/form/creation/code
         parent: danmyers-custom-entity-create-modal
         targetZone: fields
         position: 10

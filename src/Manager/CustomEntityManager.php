@@ -8,6 +8,7 @@ use Akeneo\Tool\Component\StorageUtils\Remover\RemoverInterface;
 use Akeneo\Tool\Component\StorageUtils\Saver\SaverInterface;
 use Akeneo\Tool\Component\StorageUtils\Updater\ObjectUpdaterInterface;
 use DanMyers\CustomEntityBundle\Entity\AbstractCustomEntity;
+use DanMyers\CustomEntityBundle\Entity\CodeGenerator;
 use DanMyers\CustomEntityBundle\Registry\CustomEntityDefinition;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -58,9 +59,14 @@ class CustomEntityManager implements CustomEntityManagerInterface
         return $this->entityManager->getRepository($definition->getClass())->findBy([], ['sortOrder' => 'DESC', 'code' => 'ASC']);
     }
 
+    /**
+     * Also generates the code of new entities implementing
+     * CodeGeneratingInterface, once their fields are set.
+     */
     public function update(AbstractCustomEntity $entity, array $data): void
     {
         $this->updater->update($entity, $data);
+        CodeGenerator::apply($entity);
     }
 
     public function validate(AbstractCustomEntity $entity): ConstraintViolationListInterface

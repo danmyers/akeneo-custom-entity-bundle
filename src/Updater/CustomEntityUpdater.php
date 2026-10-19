@@ -102,16 +102,28 @@ class CustomEntityUpdater implements ObjectUpdaterInterface
 
                 return;
             case 'labels':
-            case 'label':
                 $this->updateLabels($entity, $property, $value);
 
                 return;
+            case 'label':
+                if ($entity instanceof AbstractTranslatableCustomEntity) {
+                    $this->updateLabels($entity, $property, $value);
+
+                    return;
+                }
+                break;
         }
 
         $field = $this->schemaProvider->getField($definition, $property);
         if (null === $field) {
             $this->setRawValue($entity, $property, $value);
 
+            return;
+        }
+
+        // a mapped property without setter is computed by the entity (e.g. a
+        // label built from other fields): it is exported, never imported
+        if (!$this->propertyAccessor->isWritable($entity, $property)) {
             return;
         }
 
@@ -123,12 +135,6 @@ class CustomEntityUpdater implements ObjectUpdaterInterface
         $class = ClassUtils::getClass($entity);
 
         if (!$entity instanceof AbstractTranslatableCustomEntity) {
-            // non translatable entities may have a regular "label" field
-            if ('label' === $property && $this->entityManager->getClassMetadata($class)->hasField('label')) {
-                $this->propertyAccessor->setValue($entity, 'label', null === $value ? null : (string) $value);
-
-                return;
-            }
             throw UnknownPropertyException::unknownProperty($property);
         }
 

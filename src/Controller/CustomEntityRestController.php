@@ -8,6 +8,7 @@ use Akeneo\Pim\Enrichment\Component\Product\Repository\ReferenceDataRepositoryIn
 use Akeneo\Tool\Component\StorageUtils\Exception\PropertyException;
 use Akeneo\UserManagement\Bundle\Context\UserContext;
 use DanMyers\CustomEntityBundle\Entity\AbstractCustomEntity;
+use DanMyers\CustomEntityBundle\Entity\CodeGeneratingInterface;
 use DanMyers\CustomEntityBundle\Event\CustomEntityActionEvent;
 use DanMyers\CustomEntityBundle\Event\CustomEntityEvents;
 use DanMyers\CustomEntityBundle\Exception\NonRemovableEntityException;
@@ -72,6 +73,7 @@ class CustomEntityRestController
                 'menuPosition' => $definition->getMenuPosition(),
                 'menuItem' => sprintf('danmyers-custom-entity-menu-%s', str_replace('_', '-', $definition->getName())),
                 'translatable' => $this->schemaProvider->isTranslatable($definition),
+                'generatedCode' => is_a($definition->getClass(), CodeGeneratingInterface::class, true),
                 'fields' => array_values(array_map(
                     static fn ($field): array => $field->toArray(),
                     $this->schemaProvider->getFields($definition),

@@ -10,6 +10,7 @@ danmyers_custom_entity:
         title: Create
         success: The entity has been created.
         label: Label
+        duplicate: An entry with these values already exists.
     edit:
         title: '{{ label }}'
         update_success: The entity has been saved.

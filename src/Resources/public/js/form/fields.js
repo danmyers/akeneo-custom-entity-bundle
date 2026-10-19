@@ -10,7 +10,8 @@
  * - image: the core media field
  *
  * Config:
- * - onlyRequired {boolean} render only the required fields (creation modal)
+ * - onlyRequired {boolean} render only the required fields (creation modal),
+ *                          or every field for entities generating their code
  * - exclude      {string[]} field names not to render
  */
 define([
@@ -75,7 +76,11 @@ define([
 
       _.sortBy(type.fields, 'position')
         .filter(field => field.form)
-        .filter(field => !this.config.onlyRequired || field.required)
+        // entities generating their code from their fields need them all at
+        // creation: the code is fixed afterwards
+        .filter(field => !this.config.onlyRequired || field.required || type.generatedCode)
+        // the sort order keeps its default at creation
+        .filter(field => !this.config.onlyRequired || 'sortOrder' !== field.name)
         .filter(field => !_.contains(this.config.exclude, field.name))
         // associations can only be edited when they target another custom entity
         .filter(field => !_.contains(['select', 'multiselect'], field.type) || null !== field.customEntity)
