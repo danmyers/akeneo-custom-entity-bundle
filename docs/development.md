@@ -65,6 +65,14 @@ Projects/
 
 The demo entities are `demo_color`, `demo_fabric`, `demo_brand` and `demo_pictogram`.
 
+The companion [reference data picker](https://github.com/danmyers/akeneo-reference-data-picker-bundle)
+is developed the same way: mount it under `packages/` too and add a second path repository.
+
+After editing `docker-compose.override.yml`, check that every mount is populated in the long-running
+containers (`docker compose exec fpm ls /srv/pim/packages/<bundle>`). Docker Desktop sometimes drops
+one of several nested bind mounts when recreating a container; the PIM then fails with "class not
+found". `docker compose up -d --force-recreate fpm httpd node` fixes it.
+
 ### After a change
 
 | Changed | Run |

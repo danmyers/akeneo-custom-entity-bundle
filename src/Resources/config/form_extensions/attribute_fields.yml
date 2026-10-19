@@ -1,5 +1,0 @@
-# Product edit field of "reference data multi select" attributes: a modal to
-# pick several custom entities at once. Falls back to Akeneo's original field
-# for reference data that is not a custom entity.
-attribute_fields:
-    akeneo-multi-select-reference-data-field: danmyers-custom-entity/product/field/reference-multi-select-field

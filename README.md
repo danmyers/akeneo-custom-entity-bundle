@@ -24,7 +24,6 @@ That entry gives you, with no other file to write:
 | Mass actions | Mass delete, and CSV / XLSX quick exports of the selection or of every filtered row |
 | Import / export | CSV and XLSX import and export job profiles |
 | Product attributes | Registered as Akeneo reference data, so it can back reference data simple/multi select attributes |
-| Multi select picker | On products, multi select values are added with a modal: search, tick several results (kept across searches), add them at once |
 | Removal guard | Refuses to delete an entity still used by a product or product model |
 | History | Every creation, change and deletion is versioned |
 | Permissions | Per-entity ACLs (list, create, edit, delete, history) on the role screen |
@@ -177,27 +176,10 @@ danmyers_custom_entity:
 
 ## Picking several values on products
 
-On the product edit form (and bulk "Add attribute values"), **Reference data multi select** attributes
-backed by a custom entity get a picker:
-
-1. Click **+** next to the field.
-2. Search by code or label, tick the results you want. Ticked entities stay selected when you search
-   again and are listed on the right; values already on the product are shown as "already added".
-   **Select all (N)** at the top of the list ticks every loaded result (results loaded later with
-   "Load more" arrive unticked), shows a dash when only some are ticked, and unticks them all when
-   they all are.
-3. Click **Add N items**: they are appended to the field. Remove values with the × of each chip.
-
-![Picker](docs/images/product-picker.png)
-
-The field only uses the picker for custom entities the user can list; any other reference data keeps
-Akeneo's standard field. To turn the picker off, map the field back to Akeneo's module in one of your
-bundles' `Resources/config/form_extensions/*.yml` (registered after this bundle):
-
-```yaml
-attribute_fields:
-    akeneo-multi-select-reference-data-field: pim/reference-multi-select-field
-```
+To add several custom entities at once to a Reference data multi select attribute (search, tick
+results across searches, "Select all", add them in one go), install the companion
+[danmyers/akeneo-reference-data-picker-bundle](https://github.com/danmyers/akeneo-reference-data-picker-bundle).
+It works with any reference data; with custom entities, its search matches every word of the query.
 
 ## Generated codes and computed fields
 
@@ -234,7 +216,7 @@ class Vehicle extends AbstractCustomEntity implements CodeGeneratingInterface
 }
 ```
 
-Searches (selects, picker) match every word of the query, in any order, against the code and the
+Searches (selects, the companion picker) match every word of the query, in any order, against the code and the
 label: "wrangler 2025" finds "2025 Jeep Wrangler Unlimited (JL)".
 
 ## Translatable entities

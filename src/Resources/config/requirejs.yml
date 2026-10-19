@@ -21,9 +21,6 @@ config:
         danmyers-custom-entity/form/edit/translation-section: danmyerscustomentity/js/form/edit/translation-section
         danmyers-custom-entity/form/edit/history: danmyerscustomentity/js/form/edit/history
         danmyers-custom-entity/job/custom-entity-select: danmyerscustomentity/js/job/custom-entity-select
-        danmyers-custom-entity/product/field/reference-multi-select-field: danmyerscustomentity/js/product/field/reference-multi-select-field
-        danmyers-custom-entity/product/field/reference-picker: danmyerscustomentity/js/product/field/reference-picker
-        danmyers-custom-entity/template/product/reference-picker: danmyerscustomentity/templates/product/reference-picker.html
 
     config:
         pim/controller-registry:

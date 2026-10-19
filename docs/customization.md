@@ -11,7 +11,6 @@ Everything the bundle generates can be replaced, one piece at a time, without fo
 - [Repository and selects](#repository-and-selects)
 - [Disabling actions](#disabling-actions)
 - [Reference data declared elsewhere](#reference-data-declared-elsewhere)
-- [Multi select picker](#multi-select-picker)
 
 ## Fields
 
@@ -240,29 +239,3 @@ If `akeneo_pim_structure.reference_data` already declares a reference data with 
 class, it is kept as is. With the same name but another class, the container refuses to build:
 rename the custom entity or set `reference_data: false`.
 
-## Multi select picker
-
-The product field of reference data multi select attributes is
-`danmyers-custom-entity/product/field/reference-multi-select-field` (mapped on the
-`akeneo-multi-select-reference-data-field` field type). It extends Akeneo's field and only switches to
-the picker when the attribute's reference data is a custom entity visible to the user.
-
-The modal itself is `danmyers-custom-entity/product/field/reference-picker`, usable from your own
-modules:
-
-```js
-const ReferencePicker = require('danmyers-custom-entity/product/field/reference-picker');
-
-ReferencePicker.open({
-  customEntity: 'color',          // custom entity name
-  title: 'Colors',
-  subtitle: 'Pick colors',
-  locale: 'en_US',                // locale of the labels
-  existingCodes: ['red'],         // shown as "already added"
-}).then(selected => {
-  // [{code: 'blue', label: 'Blue'}, ...] in the order they were ticked; rejected on cancel
-});
-```
-
-Results come from the `danmyers_custom_entity_rest_search` endpoint (25 per page), so the repository
-search customizations above apply to the picker too.
