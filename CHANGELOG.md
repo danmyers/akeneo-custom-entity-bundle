@@ -19,3 +19,4 @@ First release, for Akeneo PIM Community Edition 7.0.
   code-less import rows matched on the generated code.
 - Mapped properties without setter are treated as computed (read-only, ignored by imports).
 - Searches match every word of the query, in any order.
+- Licensed under the GNU General Public License v3.0 or later.

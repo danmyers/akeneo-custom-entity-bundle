@@ -4,7 +4,7 @@
     "description": "Custom entities (reference data) for Akeneo PIM 7: CRUD screens, datagrids, CSV import/export, mass actions, history and product attribute integration from a single config entry.",
     "keywords": ["akeneo", "pim", "reference data", "custom entity", "symfony-bundle"],
     "homepage": "https://github.com/danmyers/akeneo-custom-entity-bundle",
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Daniel Myers"

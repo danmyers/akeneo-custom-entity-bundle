@@ -329,4 +329,4 @@ PIM_AUTOLOAD_PATH=/path/to/pim/vendor/autoload.php vendor/bin/phpunit
 
 ## License
 
-[MIT](LICENSE) © Daniel Myers
+[GPL-3.0-or-later](LICENSE) © Daniel Myers
